@@ -7,13 +7,17 @@
 
     $data = (array) json_decode(file_get_contents('php://input')); 
 
-    $liste = null;
+    $event = null;
 
     if(isset($_SESSION['user'])){ 
-        $query = "SELECT idEvenement, libelle, description, dateDebut, dateFin, dateCreation, lieu, latitude, longitude, prix, idUtilisateur FROM t_evenement where idEvenement = '". $data['idEvent'] ."';";
-        
-        $liste = $bdd->query($query)->fetch();        
+        try{
+            $query = "SELECT idEvenement, libelle, description, dateDebut, dateFin, dateCreation, lieu, latitude, longitude, prix, idUtilisateur FROM t_evenement where idEvenement = '". $data['idEvenement'] ."';";
+            
+            $event = $bdd->query($query)->fetch();      
+        }
+        catch(Exception $e){
+        }  
     }
 
-    echo json_encode($liste);
+    echo json_encode($event);
 ?>

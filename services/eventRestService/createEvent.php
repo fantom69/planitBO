@@ -10,6 +10,8 @@
     $date = new DateTime();
     
      try{
+        
+        //Ajout evenement
         $query = "INSERT INTO t_evenement(libelle, description, dateDebut, dateFin, dateCreation, lieu, latitude, longitude, prix, idUtilisateur ) VALUES(?,?,?,?,?,?,?,?,?,?);";
         $prep = $bdd->prepare($query);
         $prep->bindValue(1, $data['libelle']);
@@ -22,10 +24,37 @@
         $prep->bindValue(8, $data['longitude']); 
         $prep->bindValue(9, $data['prix']); 
         $prep->bindValue(10, $_SESSION['user']); 
-
         $prep->execute();
 
-        echo json_encode(true);
+        
+
+        //Recup idevenement crée
+        $query = "SELECT MAX(idEvenement) FROM t_evenement where idUtilisateur = '". $_SESSION['user'] ."';";
+        $lastIdEvent = $bdd->query($query)->fetch();   
+
+        //ajout products
+        for ($i = 0; $i < count($data['productsRequired']); $i++) {
+            $produit = $data['productsRequired'][$i];
+            $query = "INSERT INTO t_produit(libelleProduit, uniteProduit, idEvenement) VALUES(?,?,?);";
+            $prep = $bdd->prepare($query);
+            $prep->bindValue(1, $produit->libelleProduit);
+            $prep->bindValue(2, $produit->uniteProduit);
+            $prep->bindValue(3, $lastIdEvent[0]);
+            $prep->execute();
+        }
+
+        //ajout invités
+        for ($i = 0; $i < count($data['participants']); $i++) {
+            $participant = $data['participants'][$i];
+            echo json_encode($participant->idUtilisateur);
+            $query = "INSERT INTO tj_participerevenement(idUtilisateur, idEvenement, statut) VALUES(?,?,'invitation');";
+            $prep = $bdd->prepare($query);
+            $prep->bindValue(1, $participant->idUtilisateur);
+            $prep->bindValue(2, $lastIdEvent[0]);
+            $prep->execute();
+        }
+
+        //echo json_encode(true);
     }
     catch(Exception $e){
         echo json_encode(false);

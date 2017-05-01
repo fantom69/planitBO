@@ -4,7 +4,7 @@
     $liste = null;
     
     if(isset($_SESSION['user'])){ 
-        $query = "SELECT idUtilisateur, nom, prenom, mail FROM t_utilisateur where idUtilisateur = '". $_SESSION['user'] ."';";
+        $query = "SELECT idUtilisateur, nom, prenom, mail, lieu, latitude, longitude FROM t_utilisateur where idUtilisateur = '". $_SESSION['user'] ."';";
         $liste = $bdd->query($query)->fetch();        
     }
 
