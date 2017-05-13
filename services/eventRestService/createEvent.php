@@ -12,7 +12,7 @@
      try{
         
         //Ajout evenement
-        $query = "INSERT INTO t_evenement(libelle, description, dateDebut, dateFin, dateCreation, lieu, latitude, longitude, prix, idUtilisateur ) VALUES(?,?,?,?,?,?,?,?,?,?);";
+        $query = "INSERT INTO t_evenement(libelle, description, dateDebut, dateFin, dateCreation, lieu, latitude, longitude, prix, idUtilisateur, statut ) VALUES(?,?,?,?,?,?,?,?,?,?, 'edition');";
         $prep = $bdd->prepare($query);
         $prep->bindValue(1, $data['libelle']);
         $prep->bindValue(2, $data['description'] );
@@ -46,7 +46,6 @@
         //ajout invités
         for ($i = 0; $i < count($data['participants']); $i++) {
             $participant = $data['participants'][$i];
-            echo json_encode($participant->idUtilisateur);
             $query = "INSERT INTO tj_participerevenement(idUtilisateur, idEvenement, statut) VALUES(?,?,'invitation');";
             $prep = $bdd->prepare($query);
             $prep->bindValue(1, $participant->idUtilisateur);
@@ -54,7 +53,7 @@
             $prep->execute();
         }
 
-        //echo json_encode(true);
+        echo json_encode(true);
     }
     catch(Exception $e){
         echo json_encode(false);

@@ -11,7 +11,7 @@
 
     if(isset($_SESSION['user'])){ 
         try{
-            $query = "SELECT idEvenement, libelle, description, dateDebut, dateFin, dateCreation, lieu, latitude, longitude, prix, idUtilisateur FROM t_evenement where idEvenement = '". $data['idEvenement'] ."';";
+            $query = "SELECT idEvenement, libelle, description, dateDebut, dateFin, dateCreation, lieu, latitude, longitude, prix, idUtilisateur, statut FROM t_evenement where idEvenement = '". $data['idEvenement'] ."';";
             
             $event = $bdd->query($query)->fetch();      
         }
