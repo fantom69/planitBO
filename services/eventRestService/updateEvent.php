@@ -11,7 +11,7 @@
 
      try{
         //MAJ des items d'un evenement
-        $query = "UPDATE t_evenement SET libelle = ?, description = ?, dateDebut = ?, dateFin = ?, lieu = ?, latitude = ?, longitude = ?, prix = ? WHERE idEvenement = ? AND idUtilisateur = ? ;";
+        $query = "UPDATE t_evenement SET libelle = ?, description = ?, dateDebut = ?, dateFin = ?, lieu = ?, latitude = ?, longitude = ?, prix = ?, statut = ? WHERE idEvenement = ? AND idUtilisateur = ? ;";
         $prep = $bdd->prepare($query);
         $prep->bindValue(1, $data['libelle']);
         $prep->bindValue(2, $data['description']);
@@ -21,8 +21,9 @@
         $prep->bindValue(6, $data['latitude']); 
         $prep->bindValue(7, $data['longitude']); 
         $prep->bindValue(8, $data['prix']); 
-        $prep->bindValue(9,  $data['idEvenement']); 
-        $prep->bindValue(10, $_SESSION['user']); 
+        $prep->bindValue(9, $data['statut']); 
+        $prep->bindValue(10,  $data['idEvenement']); 
+        $prep->bindValue(11, $_SESSION['user']); 
         $prep->execute();
 
 

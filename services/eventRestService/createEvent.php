@@ -12,7 +12,7 @@
      try{
         
         //Ajout evenement
-        $query = "INSERT INTO t_evenement(libelle, description, dateDebut, dateFin, dateCreation, lieu, latitude, longitude, prix, idUtilisateur, statut ) VALUES(?,?,?,?,?,?,?,?,?,?, 'edition');";
+        $query = "INSERT INTO t_evenement(libelle, description, dateDebut, dateFin, dateCreation, lieu, latitude, longitude, prix, idUtilisateur, statut ) VALUES(?,?,?,?,?,?,?,?,?,?, ?);";
         $prep = $bdd->prepare($query);
         $prep->bindValue(1, $data['libelle']);
         $prep->bindValue(2, $data['description'] );
@@ -24,6 +24,7 @@
         $prep->bindValue(8, $data['longitude']); 
         $prep->bindValue(9, $data['prix']); 
         $prep->bindValue(10, $_SESSION['user']); 
+        $prep->bindValue(11, $data['statut']); 
         $prep->execute();
 
         

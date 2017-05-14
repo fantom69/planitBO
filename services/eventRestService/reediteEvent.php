@@ -5,16 +5,25 @@
     header('Access-Control-Allow-Headers: X-Requested-With');
     header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
    
-    $data = (array) json_decode(file_get_contents('php://input')); 
-    
-    try{
 
-        $query = "DELETE FROM tj_participerevenement WHERE idEvenement = ?;";
+    $data = (array) json_decode(file_get_contents('php://input')); 
+    $date = new DateTime();
+
+     try{
+        //MAJ du statut de l'event
+        $query = "UPDATE t_evenement SET statut = 'edition' WHERE idEvenement = ? AND idUtilisateur = ? ;";
         $prep = $bdd->prepare($query);
-        $prep->bindValue(1, $data['idEvenement']);
+        $prep->bindValue(1,  $data['idEvenement']); 
+        $prep->bindValue(2, $_SESSION['user']); 
         $prep->execute();
 
-        
+        //modification du statut des invites
+        $query = "UPDATE tj_participerevenement SET statut = 'invitation' WHERE idEvenement = ? ;";
+        $prep = $bdd->prepare($query);
+        $prep->bindValue(1, $data['idEvenement']); 
+        $prep->execute();
+
+
         //suppresion des quantites amenées
         $query = "SELECT idProduit FROM t_produit WHERE idEvenement  = '". $data['idEvenement'] ."';";
         $liste = $bdd->query($query)->fetchAll(); 
@@ -27,21 +36,10 @@
         }
 
 
-        $query = "DELETE FROM t_produit WHERE idEvenement = ?;";
-        $prep = $bdd->prepare($query);
-        $prep->bindValue(1, $data['idEvenement']);
-        $prep->execute();
-
-        $query = "DELETE FROM t_evenement WHERE idEvenement = ?;";
-        $prep = $bdd->prepare($query);
-        $prep->bindValue(1, $data['idEvenement']);
-        $prep->execute();
-
-        
-
         echo json_encode(true);
     }
     catch(Exception $e){
         echo json_encode(false);
     }
+
 ?>
