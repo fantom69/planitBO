@@ -18,7 +18,7 @@
         $prep->execute();
 
         //modification du statut des invites
-        $query = "UPDATE tj_participerevenement SET statut = 'invitation' WHERE idEvenement = ? ;";
+        $query = "DELETE FROM tj_participerevenement WHERE idEvenement = ? ;";
         $prep = $bdd->prepare($query);
         $prep->bindValue(1, $data['idEvenement']); 
         $prep->execute();
